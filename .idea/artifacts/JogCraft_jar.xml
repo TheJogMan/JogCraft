@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="JogCraft:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JogCraft_jar</output-path>
+    <root id="archive" name="JogCraft.jar">
+      <element id="module-output" name="JogCraft" />
+    </root>
+  </artifact>
+</component>

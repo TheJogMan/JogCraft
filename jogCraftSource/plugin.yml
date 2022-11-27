@@ -1,0 +1,6 @@
+name: JogCraft
+main: jogCraft.JogCraft
+author: TheJogMan
+depend: [JogLib]
+version: 2.0
+api-version: 1.19
