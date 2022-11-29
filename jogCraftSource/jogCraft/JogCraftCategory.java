@@ -9,9 +9,9 @@ import org.bukkit.entity.*;
 
 public class JogCraftCategory extends Category
 {
-	JogCraftCategory(Category parent)
+	JogCraftCategory()
 	{
-		super(parent, "JogCraft", "JogCraft commands.");
+		super(jogLib.JogLib.commandConsole, "JogCraft", "JogCraft commands.");
 		
 		new GetLightWand(this);
 	}

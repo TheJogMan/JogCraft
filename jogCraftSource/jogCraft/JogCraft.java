@@ -13,7 +13,7 @@ public class JogCraft extends JogPlugin
 		new FarmHand(this);
 		lightWand = new LightWand(this);
 		
-		new JogCraftCategory(JogLib.commandConsole);
+		new JogCraftCategory();
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new PathWanderer(), 0, PathWanderer.tickInterval);
 	}

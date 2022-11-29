@@ -1,14 +1,10 @@
 package jogCraft;
 
 import jogLib.customContent.*;
-import jogUtil.data.*;
-import jogUtil.data.values.*;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.block.*;
-import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.*;
@@ -24,18 +20,18 @@ public class LightWand extends CustomItemType<LightWand.LightWandItem>
 	
 	public static final int radius = 20;
 	
-	static void visualize(Player player, boolean highlight)
+	static void visualize(Player player)
 	{
 		Location location = player.getLocation();
 		for (int x = location.getBlockX() - radius; x < location.getBlockX() + radius; x++)
 			for (int y = location.getBlockY() - radius; y < location.getBlockY() + radius; y++)
 				for (int z = location.getBlockZ() - radius; z < location.getBlockZ() + radius; z++)
 				{
-					visualizeBlock(location.getWorld().getBlockAt(x, y, z), player, highlight);
+					visualizeBlock(location.getWorld().getBlockAt(x, y, z), player);
 				}
 	}
 	
-	static void visualizeBlock(Block block, Player player, boolean highlight)
+	static void visualizeBlock(Block block, Player player)
 	{
 		SpawnTime time = SpawnTime.NEVER;
 		if (empty(block) && empty(block.getRelative(BlockFace.UP)) && solid(block.getRelative(BlockFace.DOWN)))
@@ -49,23 +45,16 @@ public class LightWand extends CustomItemType<LightWand.LightWandItem>
 			}
 		}
 		
-		if (highlight)
-		{
-		
-		}
+		Particle particle;
+		if (time.equals(SpawnTime.ALWAYS))
+			particle = Particle.FLAME;
+		else if (time.equals(SpawnTime.NIGHT))
+			particle = Particle.SMOKE_NORMAL;
 		else
-		{
-			Particle particle;
-			if (time.equals(SpawnTime.ALWAYS))
-				particle = Particle.FLAME;
-			else if (time.equals(SpawnTime.NIGHT))
-				particle = Particle.SMOKE_NORMAL;
-			else
-				return;
-			
-			Location location = new Location(block.getWorld(), (double)block.getX() + .5, block.getY(), (double)block.getZ() + .5);
-			player.spawnParticle(particle, location, 1, 0, 0, 0, 0);
-		}
+			return;
+		
+		Location location = new Location(block.getWorld(), (double)block.getX() + .5, block.getY(), (double)block.getZ() + .5);
+		player.spawnParticle(particle, location, 1, 0, 0, 0, 0);
 	}
 	
 	static class Visualizer implements Runnable
@@ -87,7 +76,7 @@ public class LightWand extends CustomItemType<LightWand.LightWandItem>
 						CustomItem item = CustomItemType.getCustomObject(items[index]);
 						if (item instanceof LightWandItem)
 						{
-							visualize(player, ((LightWandItem) item).highLight());
+							visualize(player);
 						}
 					}
 				}
@@ -190,13 +179,6 @@ public class LightWand extends CustomItemType<LightWand.LightWandItem>
 	}
 	
 	@Override
-	protected void playerInteract(LightWandItem item, Player player, Block block, Action action, BlockFace face, EquipmentSlot slot, PlayerInteractEvent event)
-	{
-		if (player.isSneaking() && slot.equals(EquipmentSlot.HAND))
-			item.setHighlight(!item.highLight());
-	}
-	
-	@Override
 	protected void configureMeta(ItemMeta meta)
 	{
 		ArrayList<String> lore = new ArrayList<>();
@@ -236,17 +218,6 @@ public class LightWand extends CustomItemType<LightWand.LightWandItem>
 		LightWandItem(ItemStack stack)
 		{
 			super(stack);
-		}
-		
-		public boolean highLight()
-		{
-			Data data = getData();
-			return ((BooleanValue)data.get("Highlight", new BooleanValue(false))).get();
-		}
-		
-		public void setHighlight(boolean highlight)
-		{
-		
 		}
 	}
 }
